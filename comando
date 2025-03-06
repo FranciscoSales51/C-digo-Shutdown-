@@ -1,0 +1,25 @@
+@echo off
+
+::Pergunta ao usuário para digitar o tempo de desligamento
+set /p hora=Digite a hora de desligamento (0-23):
+set /p minuto=Digite o minuto de desligamento (0-59):
+
+::Verifica se o tempo de desligamento é válido
+if %hora% lss 0 goto erro
+if %hora% gtr 23 goto erro
+if %minuto% lss 0 goto erro
+if %minuto% gtr 59 goto erro
+
+::Calcula o tempo de desligamento em segundos
+set /a segundos=(%hora% * 3600)+(%minuto% * 60)
+
+::Executa o shutdown
+shutdown /s /t %segundos%
+
+goto fim
+
+:erro
+echo Erro: Tempo de desligamento inválido!
+pause
+
+:fim
