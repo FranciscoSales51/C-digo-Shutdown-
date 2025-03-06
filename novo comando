@@ -1,0 +1,34 @@
+@echo off
+setlocal enabledelayedexpansion
+
+rem Define o horário de desligamento desejado (formato 24 horas)
+set targetHour=17
+set targetMinute=55
+
+rem Obtém a hora e minuto atual
+for /F "tokens=1-2 delims=:" %%a in ("%time%") do (
+    set currentHour=%%a
+    set currentMinute=%%b
+)
+
+rem Calcula o tempo restante em minutos até o horário de desligamento
+set /A remainingHours=%targetHour% - %currentHour%
+set /A remainingMinutes=%targetMinute% - %currentMinute%
+
+if %remainingMinutes% lss 0 (
+    set /A remainingMinutes+=60
+    set /A remainingHours-=1
+)
+
+if %remainingHours% lss 0 (
+    set /A remainingHours+=24
+)
+
+rem Converte o tempo restante para segundos
+set /A remainingTime=(%remainingHours% * 3600) + (%remainingMinutes% * 60)
+
+rem Agenda o desligamento
+shutdown /s /t %remainingTime%
+
+echo O computador será desligado em %remainingHours% horas e %remainingMinutes% minutos.
+pause
